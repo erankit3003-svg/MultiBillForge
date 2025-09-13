@@ -11,6 +11,9 @@ import { getAuthHeaders, hasPermission } from '@/lib/auth';
 import { type Invoice, type Customer, type Product } from '@shared/schema';
 import { FileSpreadsheet, FileText, TrendingUp, PieChart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default function Reports() {
   const { user, isLoading } = useAuth();
@@ -115,17 +118,154 @@ export default function Reports() {
   const salesReportData = Object.values(salesByCustomer);
 
   const handleExportExcel = () => {
-    toast({
-      title: 'Export Started',
-      description: 'Excel export functionality would be implemented here',
-    });
+    try {
+      // Create workbook with multiple sheets
+      const workbook = XLSX.utils.book_new();
+      
+      // Summary sheet
+      const summaryData = [
+        ['BillMaster Pro - Sales Report'],
+        ['Generated on:', new Date().toLocaleDateString()],
+        [''],
+        ['Summary Statistics'],
+        ['Total Revenue:', `$${totalRevenue.toFixed(2)}`],
+        ['Paid Revenue:', `$${paidRevenue.toFixed(2)}`],
+        ['Pending Revenue:', `$${pendingRevenue.toFixed(2)}`],
+        ['Total Invoices:', filteredInvoices?.length || 0],
+        [''],
+        ['Sales by Customer'],
+        ['Customer Name', 'Invoice Count', 'Total Revenue', 'Paid Revenue'],
+        ...salesReportData.map(customer => [
+          customer.customerName,
+          customer.invoiceCount,
+          customer.totalRevenue.toFixed(2),
+          customer.paidRevenue.toFixed(2)
+        ])
+      ];
+      
+      const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(workbook, summarySheet, 'Summary');
+      
+      // Detailed invoices sheet
+      if (filteredInvoices && filteredInvoices.length > 0) {
+        const invoiceData = [
+          ['Invoice Number', 'Customer', 'Date', 'Due Date', 'Status', 'Subtotal', 'Tax', 'Total'],
+          ...filteredInvoices.map(invoice => [
+            invoice.invoiceNumber,
+            getCustomerName(invoice.customerId),
+            new Date(invoice.date).toLocaleDateString(),
+            new Date(invoice.dueDate).toLocaleDateString(),
+            invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1),
+            invoice.subtotal?.toFixed(2) || '0.00',
+            invoice.tax?.toFixed(2) || '0.00',
+            invoice.total.toFixed(2)
+          ])
+        ];
+        
+        const invoiceSheet = XLSX.utils.aoa_to_sheet(invoiceData);
+        XLSX.utils.book_append_sheet(workbook, invoiceSheet, 'Invoices');
+      }
+      
+      // Generate and download file
+      const fileName = `sales-report-${new Date().toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(workbook, fileName);
+      
+      toast({
+        title: 'Success',
+        description: 'Excel report downloaded successfully',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to generate Excel report',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleExportPDF = () => {
-    toast({
-      title: 'Export Started',
-      description: 'PDF export functionality would be implemented here',
-    });
+    try {
+      const doc = new jsPDF();
+      
+      // Title
+      doc.setFontSize(20);
+      doc.text('BillMaster Pro - Sales Report', 20, 30);
+      
+      // Subtitle
+      doc.setFontSize(12);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 45);
+      
+      // Summary statistics
+      doc.setFontSize(16);
+      doc.text('Summary Statistics', 20, 65);
+      
+      doc.setFontSize(12);
+      doc.text(`Total Revenue: $${totalRevenue.toFixed(2)}`, 20, 80);
+      doc.text(`Paid Revenue: $${paidRevenue.toFixed(2)}`, 20, 90);
+      doc.text(`Pending Revenue: $${pendingRevenue.toFixed(2)}`, 20, 100);
+      doc.text(`Total Invoices: ${filteredInvoices?.length || 0}`, 20, 110);
+      
+      // Sales by Customer table
+      if (salesReportData.length > 0) {
+        doc.setFontSize(16);
+        doc.text('Sales by Customer', 20, 130);
+        
+        (doc as any).autoTable({
+          startY: 140,
+          head: [['Customer Name', 'Invoice Count', 'Total Revenue', 'Paid Revenue']],
+          body: salesReportData.map(customer => [
+            customer.customerName,
+            customer.invoiceCount.toString(),
+            `$${customer.totalRevenue.toFixed(2)}`,
+            `$${customer.paidRevenue.toFixed(2)}`
+          ]),
+          theme: 'grid',
+          styles: { fontSize: 10 },
+          headStyles: { fillColor: [66, 139, 202] }
+        });
+      }
+      
+      // Add new page for detailed invoices if there are many customers
+      if (filteredInvoices && filteredInvoices.length > 0) {
+        doc.addPage();
+        doc.setFontSize(16);
+        doc.text('Invoice Details', 20, 30);
+        
+        (doc as any).autoTable({
+          startY: 40,
+          head: [['Invoice #', 'Customer', 'Date', 'Status', 'Total']],
+          body: filteredInvoices.slice(0, 50).map(invoice => [ // Limit to 50 for PDF readability
+            invoice.invoiceNumber,
+            getCustomerName(invoice.customerId),
+            new Date(invoice.date).toLocaleDateString(),
+            invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1),
+            `$${invoice.total.toFixed(2)}`
+          ]),
+          theme: 'grid',
+          styles: { fontSize: 9 },
+          headStyles: { fillColor: [66, 139, 202] }
+        });
+        
+        if (filteredInvoices.length > 50) {
+          doc.text(`Note: Showing first 50 of ${filteredInvoices.length} invoices`, 20, doc.internal.pageSize.height - 20);
+        }
+      }
+      
+      // Download the PDF
+      const fileName = `sales-report-${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(fileName);
+      
+      toast({
+        title: 'Success',
+        description: 'PDF report downloaded successfully',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to generate PDF report',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (

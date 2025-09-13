@@ -31,5 +31,16 @@
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "companyId": "2e60400e-31b2-447a-964d-ee4223fee41e",
+    "roleId": "role-2",
+    "email": "ankit@codedges.com",
+    "password": "$2b$12$FqB4qSRkAWbeLKeCEggYcOYPDpxyMH8WI3sTqcskHIi.SQrF5tfRG",
+    "name": "ankit",
+    "isActive": true,
+    "id": "b55bc5c0-1052-431e-994b-ca673d5cb698",
+    "createdAt": "2025-09-13T17:00:46.190Z",
+    "updatedAt": "2025-09-13T17:00:46.190Z"
   }
 ]
