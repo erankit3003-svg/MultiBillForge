@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CreateInvoiceModal } from '@/components/modals/create-invoice-modal';
+import { EditInvoiceModal } from '@/components/modals/edit-invoice-modal';
+import { ViewInvoiceModal } from '@/components/modals/view-invoice-modal';
 import { getAuthHeaders, hasPermission } from '@/lib/auth';
 import { apiRequest } from '@/lib/queryClient';
 import { type Invoice, type Customer } from '@shared/schema';
@@ -22,6 +24,10 @@ export default function Invoices() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [customerFilter, setCustomerFilter] = useState('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
+  const [viewingInvoice, setViewingInvoice] = useState<Invoice | null>(null);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -79,6 +85,25 @@ export default function Invoices() {
     },
   });
 
+  const emailInvoiceMutation = useMutation({
+    mutationFn: async (invoiceId: string) => {
+      await apiRequest('POST', `/api/invoices/${invoiceId}/email`);
+    },
+    onSuccess: () => {
+      toast({
+        title: 'Success',
+        description: 'Invoice emailed successfully',
+      });
+    },
+    onError: () => {
+      toast({
+        title: 'Error',
+        description: 'Failed to send invoice email',
+        variant: 'destructive',
+      });
+    },
+  });
+
   if (isLoading || invoicesLoading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
@@ -125,6 +150,10 @@ export default function Invoices() {
     if (window.confirm('Are you sure you want to delete this invoice?')) {
       deleteInvoiceMutation.mutate(id);
     }
+  };
+
+  const handleEmailInvoice = (invoiceId: string) => {
+    emailInvoiceMutation.mutate(invoiceId);
   };
 
   const handleDownloadPDF = async (invoiceId: string) => {
@@ -296,7 +325,8 @@ export default function Invoices() {
                             size="sm" 
                             title="View"
                             onClick={() => {
-                              alert(`View invoice: ${invoice.invoiceNumber}`);
+                              setViewingInvoice(invoice);
+                              setShowViewModal(true);
                             }}
                             data-testid={`button-view-invoice-${invoice.id}`}
                           >
@@ -317,7 +347,8 @@ export default function Invoices() {
                               size="sm" 
                               title="Edit"
                               onClick={() => {
-                                alert(`Edit invoice: ${invoice.invoiceNumber}`);
+                                setEditingInvoice(invoice);
+                                setShowEditModal(true);
                               }}
                               data-testid={`button-edit-invoice-${invoice.id}`}
                             >
@@ -328,9 +359,7 @@ export default function Invoices() {
                             variant="ghost" 
                             size="sm" 
                             title="Send Email"
-                            onClick={() => {
-                              alert(`Send email for invoice: ${invoice.invoiceNumber}`);
-                            }}
+                            onClick={() => handleEmailInvoice(invoice.id)}
                             data-testid={`button-email-invoice-${invoice.id}`}
                           >
                             <Mail className="h-4 w-4" />
@@ -366,6 +395,18 @@ export default function Invoices() {
         <CreateInvoiceModal
           open={showCreateModal}
           onOpenChange={setShowCreateModal}
+        />
+        
+        <EditInvoiceModal
+          open={showEditModal}
+          onOpenChange={setShowEditModal}
+          invoice={editingInvoice}
+        />
+        
+        <ViewInvoiceModal
+          open={showViewModal}
+          onOpenChange={setShowViewModal}
+          invoiceId={viewingInvoice?.id || null}
         />
       </div>
     </div>
