@@ -88,8 +88,12 @@ export function Sidebar() {
             <Users className="h-5 w-5 text-muted-foreground" />
           </div>
           <div>
-            <p className="font-medium text-foreground" data-testid="text-user-name">{user.name}</p>
-            <p className="text-xs text-muted-foreground" data-testid="text-user-role">{user.role.name}</p>
+            <p className="font-medium text-foreground" data-testid="text-user-name">
+              {user.name}
+            </p>
+            <p className="text-xs text-muted-foreground" data-testid="text-user-role">
+              {user.role.name}
+            </p>
           </div>
         </div>
       </div>
@@ -98,32 +102,36 @@ export function Sidebar() {
       <nav className="p-4 space-y-2">
         {menuItems.map((item) => {
           if (!item.show) return null;
-          
+
           const isActive = location === item.href;
           const Icon = item.icon;
 
           return (
-            <Link key={item.href} href={item.href}>
-              <a
-                className={cn(
-                  'nav-item flex items-center space-x-3 p-3 rounded-lg transition-colors',
-                  isActive ? 'active bg-primary text-primary-foreground' : 'hover:bg-accent'
-                )}
-                data-testid={`link-${item.label.toLowerCase().replace(' ', '-')}`}
-              >
-                <Icon className="h-5 w-5" />
-                <span>{item.label}</span>
-              </a>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                'nav-item flex items-center space-x-3 p-3 rounded-lg transition-colors',
+                isActive
+                  ? 'active bg-primary text-primary-foreground'
+                  : 'hover:bg-accent'
+              )}
+              data-testid={`link-${item.label.toLowerCase().replace(' ', '-')}`}
+            >
+              <Icon className="h-5 w-5" />
+              <span>{item.label}</span>
             </Link>
           );
         })}
 
         <div className="pt-4 border-t border-border mt-4">
-          <Link href="/settings">
-            <a className="nav-item flex items-center space-x-3 p-3 rounded-lg transition-colors hover:bg-accent" data-testid="link-settings">
-              <Settings className="h-5 w-5" />
-              <span>Settings</span>
-            </a>
+          <Link
+            href="/settings"
+            className="nav-item flex items-center space-x-3 p-3 rounded-lg transition-colors hover:bg-accent"
+            data-testid="link-settings"
+          >
+            <Settings className="h-5 w-5" />
+            <span>Settings</span>
           </Link>
 
           <button
