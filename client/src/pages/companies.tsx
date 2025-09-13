@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CreateCompanyModal } from '@/components/modals/create-company-modal';
+import { EditCompanyModal } from '@/components/modals/edit-company-modal';
 import { getAuthHeaders, isSuperAdmin } from '@/lib/auth';
 import { apiRequest } from '@/lib/queryClient';
 import { type Company } from '@shared/schema';
@@ -19,6 +20,8 @@ export default function Companies() {
   const [, setLocation] = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingCompany, setEditingCompany] = useState<Company | null>(null);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -174,7 +177,8 @@ export default function Companies() {
                             size="sm" 
                             title="Edit"
                             onClick={() => {
-                              alert(`Edit company: ${company.name}`);
+                              setEditingCompany(company);
+                              setShowEditModal(true);
                             }}
                             data-testid={`button-edit-company-${company.id}`}
                           >
@@ -185,7 +189,11 @@ export default function Companies() {
                             size="sm" 
                             title="Manage Users"
                             onClick={() => {
-                              alert(`Manage users for: ${company.name}`);
+                              // TODO: Implement user management functionality
+                              toast({
+                                title: 'Feature Coming Soon',
+                                description: 'User management functionality will be implemented soon',
+                              });
                             }}
                             data-testid={`button-manage-users-${company.id}`}
                           >
@@ -220,6 +228,12 @@ export default function Companies() {
         <CreateCompanyModal
           open={showCreateModal}
           onOpenChange={setShowCreateModal}
+        />
+        
+        <EditCompanyModal
+          open={showEditModal}
+          onOpenChange={setShowEditModal}
+          company={editingCompany}
         />
       </div>
     </div>
