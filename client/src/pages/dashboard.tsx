@@ -9,10 +9,12 @@ import { Button } from '@/components/ui/button';
 import { getAuthHeaders } from '@/lib/auth';
 import { type DashboardStats, type Invoice, type Customer } from '@shared/schema';
 import { DollarSign, Users, Clock, Package, Eye, Download, Edit } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function Dashboard() {
   const { user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -89,6 +91,56 @@ export default function Dashboard() {
       default:
         return `${baseClasses} status-pending`;
     }
+  };
+
+  const handleDownloadPDF = async (invoiceId: string) => {
+    try {
+      const res = await fetch(`/api/invoices/${invoiceId}/pdf`, {
+        headers: getAuthHeaders(),
+      });
+      
+      if (!res.ok) throw new Error('Failed to generate PDF');
+      
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = `invoice-${invoiceId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      toast({
+        title: 'Success',
+        description: 'PDF downloaded successfully',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to download PDF',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleViewInvoice = (invoiceId: string) => {
+    // Navigate to invoice details or open modal
+    setLocation(`/invoices`); // For now, navigate to invoices page
+    toast({
+      title: 'Info',
+      description: 'Redirected to invoices page',
+    });
+  };
+
+  const handleEditInvoice = (invoiceId: string) => {
+    // Navigate to invoice edit or open modal
+    setLocation(`/invoices`); // For now, navigate to invoices page
+    toast({
+      title: 'Info',
+      description: 'Redirected to invoices page for editing',
+    });
   };
 
   return (
@@ -231,15 +283,33 @@ export default function Dashboard() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center space-x-2">
-                          <button className="text-primary hover:text-primary/80 p-2" title="View" data-testid={`button-view-invoice-${invoice.id}`}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            title="View"
+                            onClick={() => handleViewInvoice(invoice.id)}
+                            data-testid={`button-view-invoice-${invoice.id}`}
+                          >
                             <Eye className="h-4 w-4" />
-                          </button>
-                          <button className="text-primary hover:text-primary/80 p-2" title="Download PDF" data-testid={`button-download-invoice-${invoice.id}`}>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            title="Download PDF"
+                            onClick={() => handleDownloadPDF(invoice.id)}
+                            data-testid={`button-download-invoice-${invoice.id}`}
+                          >
                             <Download className="h-4 w-4" />
-                          </button>
-                          <button className="text-primary hover:text-primary/80 p-2" title="Edit" data-testid={`button-edit-invoice-${invoice.id}`}>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            title="Edit"
+                            onClick={() => handleEditInvoice(invoice.id)}
+                            data-testid={`button-edit-invoice-${invoice.id}`}
+                          >
                             <Edit className="h-4 w-4" />
-                          </button>
+                          </Button>
                         </div>
                       </td>
                     </tr>
