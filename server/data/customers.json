@@ -1,0 +1,26 @@
+[
+  {
+    "id": "customer-1",
+    "companyId": "company-1",
+    "name": "Tech Solutions Inc.",
+    "email": "tech@solutions.com",
+    "phone": "+1 (555) 234-5678",
+    "address": "789 Tech Blvd, Austin, TX 78701",
+    "taxId": "12-3456789",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "customer-2",
+    "companyId": "company-1",
+    "name": "Design Studio LLC",
+    "email": "hello@designstudio.com",
+    "phone": "+1 (555) 345-6789",
+    "address": "321 Creative St, Portland, OR 97201",
+    "taxId": "98-7654321",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+]

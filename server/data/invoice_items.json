@@ -1,0 +1,20 @@
+[
+  {
+    "id": "item-1",
+    "invoiceId": "invoice-1",
+    "productId": "product-1",
+    "description": "Web Development - Custom Dashboard",
+    "quantity": 1,
+    "unitPrice": 2450.00,
+    "total": 2450.00
+  },
+  {
+    "id": "item-2",
+    "invoiceId": "invoice-2",
+    "productId": "product-2",
+    "description": "Technical Consulting - 8 hours",
+    "quantity": 8,
+    "unitPrice": 150.00,
+    "total": 1200.00
+  }
+]

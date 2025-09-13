@@ -1,0 +1,28 @@
+[
+  {
+    "id": "company-1",
+    "name": "Acme Corporation",
+    "slug": "acme-corp",
+    "logoUrl": "",
+    "address": "123 Business St, Suite 100, New York, NY 10001",
+    "phone": "+1 (555) 123-4567",
+    "email": "contact@acme.com",
+    "website": "https://acme.com",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "isActive": true
+  },
+  {
+    "id": "company-2",
+    "name": "TechStart Solutions",
+    "slug": "techstart-solutions",
+    "logoUrl": "",
+    "address": "456 Tech Ave, San Francisco, CA 94105",
+    "phone": "+1 (555) 987-6543",
+    "email": "hello@techstart.com",
+    "website": "https://techstart.com",
+    "createdAt": "2024-01-05T00:00:00.000Z",
+    "updatedAt": "2024-01-05T00:00:00.000Z",
+    "isActive": true
+  }
+]

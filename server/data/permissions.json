@@ -1,0 +1,164 @@
+[
+  {
+    "id": "perm-1",
+    "roleId": "role-1",
+    "module": "companies",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-2",
+    "roleId": "role-1",
+    "module": "users",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-3",
+    "roleId": "role-1",
+    "module": "products",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-4",
+    "roleId": "role-1",
+    "module": "customers",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-5",
+    "roleId": "role-1",
+    "module": "invoices",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-6",
+    "roleId": "role-1",
+    "module": "reports",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-7",
+    "roleId": "role-2",
+    "module": "users",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-8",
+    "roleId": "role-2",
+    "module": "products",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-9",
+    "roleId": "role-2",
+    "module": "customers",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-10",
+    "roleId": "role-2",
+    "module": "invoices",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-11",
+    "roleId": "role-2",
+    "module": "reports",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": true
+  },
+  {
+    "id": "perm-12",
+    "roleId": "role-3",
+    "module": "products",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": false
+  },
+  {
+    "id": "perm-13",
+    "roleId": "role-3",
+    "module": "customers",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": false
+  },
+  {
+    "id": "perm-14",
+    "roleId": "role-3",
+    "module": "invoices",
+    "canCreate": true,
+    "canRead": true,
+    "canUpdate": true,
+    "canDelete": false
+  },
+  {
+    "id": "perm-15",
+    "roleId": "role-3",
+    "module": "reports",
+    "canCreate": false,
+    "canRead": true,
+    "canUpdate": false,
+    "canDelete": false
+  },
+  {
+    "id": "perm-16",
+    "roleId": "role-4",
+    "module": "products",
+    "canCreate": false,
+    "canRead": true,
+    "canUpdate": false,
+    "canDelete": false
+  },
+  {
+    "id": "perm-17",
+    "roleId": "role-4",
+    "module": "customers",
+    "canCreate": false,
+    "canRead": true,
+    "canUpdate": false,
+    "canDelete": false
+  },
+  {
+    "id": "perm-18",
+    "roleId": "role-4",
+    "module": "invoices",
+    "canCreate": false,
+    "canRead": true,
+    "canUpdate": false,
+    "canDelete": false
+  }
+]

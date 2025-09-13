@@ -1,0 +1,35 @@
+[
+  {
+    "id": "user-1",
+    "companyId": "company-1",
+    "roleId": "role-1",
+    "email": "super@admin.com",
+    "password": "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfGMXyNg7fv2ELq",
+    "name": "Super Admin",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "user-2",
+    "companyId": "company-1",
+    "roleId": "role-2",
+    "email": "admin@acme.com",
+    "password": "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfGMXyNg7fv2ELq",
+    "name": "John Admin",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "user-3",
+    "companyId": "company-1",
+    "roleId": "role-3",
+    "email": "manager@acme.com",
+    "password": "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfGMXyNg7fv2ELq",
+    "name": "Jane Manager",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+]

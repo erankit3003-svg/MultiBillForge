@@ -1,0 +1,26 @@
+[
+  {
+    "id": "product-1",
+    "companyId": "company-1",
+    "name": "Web Development",
+    "description": "Custom web application development",
+    "price": 2450.00,
+    "unit": "hour",
+    "category": "Development",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "product-2",
+    "companyId": "company-1",
+    "name": "Consulting",
+    "description": "Technical consulting services",
+    "price": 150.00,
+    "unit": "hour",
+    "category": "Consulting",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "role-1",
+    "name": "Super Admin",
+    "description": "Full system access across all companies"
+  },
+  {
+    "id": "role-2",
+    "name": "Company Admin",
+    "description": "Full access within company scope"
+  },
+  {
+    "id": "role-3",
+    "name": "Manager",
+    "description": "Limited management access within company"
+  },
+  {
+    "id": "role-4",
+    "name": "User",
+    "description": "Basic user access within company"
+  }
+]
