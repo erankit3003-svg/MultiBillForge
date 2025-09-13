@@ -28,6 +28,15 @@ export default function Users() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
+  // Set company filter from URL parameter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const companyId = urlParams.get('companyId');
+    if (companyId) {
+      setCompanyFilter(companyId);
+    }
+  }, []);
+
   useEffect(() => {
     if (!isLoading && !user) {
       setLocation('/login');

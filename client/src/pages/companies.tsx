@@ -189,11 +189,7 @@ export default function Companies() {
                             size="sm" 
                             title="Manage Users"
                             onClick={() => {
-                              // TODO: Implement user management functionality
-                              toast({
-                                title: 'Feature Coming Soon',
-                                description: 'User management functionality will be implemented soon',
-                              });
+                              setLocation(`/users?companyId=${company.id}`);
                             }}
                             data-testid={`button-manage-users-${company.id}`}
                           >
