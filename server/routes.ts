@@ -4,6 +4,7 @@ import { z } from "zod";
 import { storage } from "./storage";
 import { AuthService } from "./services/auth";
 import { PDFService } from "./services/pdf";
+import { sendInvoiceEmail } from "./services/emailService";
 import {
   loginSchema,
   insertCompanySchema,
@@ -389,6 +390,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.send(pdfBuffer);
     } catch (error) {
       res.status(500).json({ message: "Failed to generate PDF" });
+    }
+  });
+
+  // Email invoice
+  app.post("/api/invoices/:id/email", authMiddleware, requirePermission('invoices', 'canUpdate'), async (req: any, res) => {
+    try {
+      const invoice = await storage.getInvoiceWithDetails(req.params.id);
+      if (!invoice) {
+        return res.status(404).json({ message: "Invoice not found" });
+      }
+
+      // Critical security check: ensure invoice belongs to user's company
+      if (invoice.companyId !== req.user.companyId) {
+        return res.status(404).json({ message: "Invoice not found" });
+      }
+
+      const result = await sendInvoiceEmail(invoice);
+      if (result.success) {
+        res.json({ message: "Invoice email sent successfully" });
+      } else {
+        if (result.error === 'Email service not configured') {
+          res.status(503).json({ message: "Email service not available" });
+        } else {
+          res.status(500).json({ message: result.error || "Failed to send invoice email" });
+        }
+      }
+    } catch (error) {
+      console.error('Email invoice error:', error);
+      res.status(500).json({ message: "Failed to send invoice email" });
     }
   });
 

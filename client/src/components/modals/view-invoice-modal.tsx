@@ -94,11 +94,28 @@ export function ViewInvoiceModal({ open, onOpenChange, invoiceId }: InvoiceViewM
     }
   };
 
-  const handleEmailInvoice = () => {
-    toast({
-      title: 'Info',
-      description: 'Email functionality will be implemented soon',
-    });
+  const handleEmailInvoice = async () => {
+    if (!invoiceId) return;
+    
+    try {
+      const res = await fetch(`/api/invoices/${invoiceId}/email`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!res.ok) throw new Error('Failed to send email');
+      
+      toast({
+        title: 'Success',
+        description: 'Invoice email sent successfully',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to send invoice email',
+        variant: 'destructive',
+      });
+    }
   };
 
   const getStatusBadge = (status: string) => {
