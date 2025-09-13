@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CreateProductModal } from '@/components/modals/create-product-modal';
+import { EditProductModal } from '@/components/modals/edit-product-modal';
 import { getAuthHeaders, hasPermission } from '@/lib/auth';
 import { apiRequest } from '@/lib/queryClient';
 import { type Product } from '@shared/schema';
@@ -21,6 +22,8 @@ export default function Products() {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -217,8 +220,8 @@ export default function Products() {
                               size="sm" 
                               title="Edit"
                               onClick={() => {
-                                // For now, show an alert - edit functionality can be implemented later
-                                alert(`Edit product: ${product.name}`);
+                                setEditingProduct(product);
+                                setShowEditModal(true);
                               }}
                               data-testid={`button-edit-product-${product.id}`}
                             >
@@ -256,6 +259,12 @@ export default function Products() {
         <CreateProductModal
           open={showCreateModal}
           onOpenChange={setShowCreateModal}
+        />
+
+        <EditProductModal
+          open={showEditModal}
+          onOpenChange={setShowEditModal}
+          product={editingProduct}
         />
       </div>
     </div>

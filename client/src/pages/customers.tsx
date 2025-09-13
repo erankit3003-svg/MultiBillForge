@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CreateCustomerModal } from '@/components/modals/create-customer-modal';
+import { EditCustomerModal } from '@/components/modals/edit-customer-modal';
 import { getAuthHeaders, hasPermission } from '@/lib/auth';
 import { apiRequest } from '@/lib/queryClient';
 import { type Customer } from '@shared/schema';
@@ -19,6 +20,8 @@ export default function Customers() {
   const [, setLocation] = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -194,7 +197,8 @@ export default function Customers() {
                               size="sm" 
                               title="Edit"
                               onClick={() => {
-                                alert(`Edit customer: ${customer.name}`);
+                                setEditingCustomer(customer);
+                                setShowEditModal(true);
                               }}
                               data-testid={`button-edit-customer-${customer.id}`}
                             >
@@ -232,6 +236,12 @@ export default function Customers() {
         <CreateCustomerModal
           open={showCreateModal}
           onOpenChange={setShowCreateModal}
+        />
+
+        <EditCustomerModal
+          open={showEditModal}
+          onOpenChange={setShowEditModal}
+          customer={editingCustomer}
         />
       </div>
     </div>

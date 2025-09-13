@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CreateUserModal } from '@/components/modals/create-user-modal';
+import { EditUserModal } from '@/components/modals/edit-user-modal';
 import { getAuthHeaders, hasPermission, isSuperAdmin } from '@/lib/auth';
 import { apiRequest } from '@/lib/queryClient';
 import { type User, type Role, type Company } from '@shared/schema';
@@ -22,6 +23,8 @@ export default function Users() {
   const [roleFilter, setRoleFilter] = useState('all');
   const [companyFilter, setCompanyFilter] = useState('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -268,7 +271,8 @@ export default function Users() {
                               size="sm" 
                               title="Edit"
                               onClick={() => {
-                                alert(`Edit user: ${userItem.name}`);
+                                setEditingUser(userItem);
+                                setShowEditModal(true);
                               }}
                               data-testid={`button-edit-user-${userItem.id}`}
                             >
@@ -306,6 +310,12 @@ export default function Users() {
         <CreateUserModal
           open={showCreateModal}
           onOpenChange={setShowCreateModal}
+        />
+
+        <EditUserModal
+          open={showEditModal}
+          onOpenChange={setShowEditModal}
+          user={editingUser}
         />
       </div>
     </div>
