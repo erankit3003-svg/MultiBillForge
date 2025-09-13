@@ -7,6 +7,7 @@
     "price": 2450.00,
     "unit": "hour",
     "category": "Development",
+    "taxRate": 8,
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z"
@@ -19,6 +20,7 @@
     "price": 150.00,
     "unit": "hour",
     "category": "Consulting",
+    "taxRate": 8,
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z"

@@ -89,6 +89,7 @@ export const productSchema = z.object({
   price: z.number(),
   unit: z.string().optional(),
   category: z.string().optional(),
+  taxRate: z.number().default(0),
   isActive: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),
