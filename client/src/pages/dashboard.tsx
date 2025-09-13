@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
@@ -6,6 +6,7 @@ import { Sidebar } from '@/components/layout/sidebar';
 import { Header } from '@/components/layout/header';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ViewInvoiceModal } from '@/components/modals/view-invoice-modal';
 import { getAuthHeaders } from '@/lib/auth';
 import { type DashboardStats, type Invoice, type Customer } from '@shared/schema';
 import { DollarSign, Users, Clock, Package, Eye, Download, Edit } from 'lucide-react';
@@ -15,6 +16,8 @@ export default function Dashboard() {
   const { user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [viewingInvoiceId, setViewingInvoiceId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -126,12 +129,8 @@ export default function Dashboard() {
   };
 
   const handleViewInvoice = (invoiceId: string) => {
-    // Navigate to invoice details or open modal
-    setLocation(`/invoices`); // For now, navigate to invoices page
-    toast({
-      title: 'Info',
-      description: 'Redirected to invoices page',
-    });
+    setViewingInvoiceId(invoiceId);
+    setShowViewModal(true);
   };
 
   const handleEditInvoice = (invoiceId: string) => {
@@ -325,6 +324,12 @@ export default function Dashboard() {
             </table>
           </div>
         </Card>
+
+        <ViewInvoiceModal
+          open={showViewModal}
+          onOpenChange={setShowViewModal}
+          invoiceId={viewingInvoiceId}
+        />
       </div>
     </div>
   );
