@@ -169,10 +169,26 @@ export default function Companies() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center space-x-2">
-                          <Button variant="ghost" size="sm" title="Edit" data-testid={`button-edit-company-${company.id}`}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            title="Edit"
+                            onClick={() => {
+                              alert(`Edit company: ${company.name}`);
+                            }}
+                            data-testid={`button-edit-company-${company.id}`}
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" title="Manage Users" data-testid={`button-manage-users-${company.id}`}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            title="Manage Users"
+                            onClick={() => {
+                              alert(`Manage users for: ${company.name}`);
+                            }}
+                            data-testid={`button-manage-users-${company.id}`}
+                          >
                             <Users className="h-4 w-4" />
                           </Button>
                           <Button

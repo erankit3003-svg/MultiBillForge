@@ -189,7 +189,15 @@ export default function Customers() {
                       <td className="p-4">
                         <div className="flex items-center space-x-2">
                           {hasPermission(user, 'customers', 'canUpdate') && (
-                            <Button variant="ghost" size="sm" title="Edit" data-testid={`button-edit-customer-${customer.id}`}>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              title="Edit"
+                              onClick={() => {
+                                alert(`Edit customer: ${customer.name}`);
+                              }}
+                              data-testid={`button-edit-customer-${customer.id}`}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
                           )}

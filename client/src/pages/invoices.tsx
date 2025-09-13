@@ -291,7 +291,15 @@ export default function Invoices() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center space-x-2">
-                          <Button variant="ghost" size="sm" title="View" data-testid={`button-view-invoice-${invoice.id}`}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            title="View"
+                            onClick={() => {
+                              alert(`View invoice: ${invoice.invoiceNumber}`);
+                            }}
+                            data-testid={`button-view-invoice-${invoice.id}`}
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
                           <Button
@@ -304,11 +312,27 @@ export default function Invoices() {
                             <Download className="h-4 w-4" />
                           </Button>
                           {hasPermission(user, 'invoices', 'canUpdate') && (
-                            <Button variant="ghost" size="sm" title="Edit" data-testid={`button-edit-invoice-${invoice.id}`}>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              title="Edit"
+                              onClick={() => {
+                                alert(`Edit invoice: ${invoice.invoiceNumber}`);
+                              }}
+                              data-testid={`button-edit-invoice-${invoice.id}`}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
                           )}
-                          <Button variant="ghost" size="sm" title="Send Email" data-testid={`button-email-invoice-${invoice.id}`}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            title="Send Email"
+                            onClick={() => {
+                              alert(`Send email for invoice: ${invoice.invoiceNumber}`);
+                            }}
+                            data-testid={`button-email-invoice-${invoice.id}`}
+                          >
                             <Mail className="h-4 w-4" />
                           </Button>
                           {hasPermission(user, 'invoices', 'canDelete') && (

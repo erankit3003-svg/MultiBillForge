@@ -212,7 +212,16 @@ export default function Products() {
                       <td className="p-4">
                         <div className="flex items-center space-x-2">
                           {hasPermission(user, 'products', 'canUpdate') && (
-                            <Button variant="ghost" size="sm" title="Edit" data-testid={`button-edit-product-${product.id}`}>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              title="Edit"
+                              onClick={() => {
+                                // For now, show an alert - edit functionality can be implemented later
+                                alert(`Edit product: ${product.name}`);
+                              }}
+                              data-testid={`button-edit-product-${product.id}`}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
                           )}

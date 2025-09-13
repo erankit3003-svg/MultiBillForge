@@ -263,7 +263,15 @@ export default function Users() {
                       <td className="p-4">
                         <div className="flex items-center space-x-2">
                           {hasPermission(user, 'users', 'canUpdate') && (
-                            <Button variant="ghost" size="sm" title="Edit" data-testid={`button-edit-user-${userItem.id}`}>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              title="Edit"
+                              onClick={() => {
+                                alert(`Edit user: ${userItem.name}`);
+                              }}
+                              data-testid={`button-edit-user-${userItem.id}`}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
                           )}
