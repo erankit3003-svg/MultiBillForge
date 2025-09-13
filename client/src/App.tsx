@@ -12,6 +12,7 @@ import Products from "@/pages/products";
 import Customers from "@/pages/customers";
 import Invoices from "@/pages/invoices";
 import Reports from "@/pages/reports";
+import Settings from "@/pages/settings";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/customers" component={Customers} />
       <Route path="/invoices" component={Invoices} />
       <Route path="/reports" component={Reports} />
+      <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
   );
