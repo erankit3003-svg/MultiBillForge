@@ -338,15 +338,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { items, ...invoiceData } = req.body;
       
-      const validatedInvoice = insertInvoiceSchema.parse(invoiceData);
-      validatedInvoice.companyId = req.user.companyId;
+      // Validate and process invoice items first
+      const validatedItems = items.map((item: any) => ({
+        productId: item.productId,
+        description: item.description,
+        quantity: Number(item.quantity),
+        unitPrice: Number(item.unitPrice),
+        total: Number(item.quantity) * Number(item.unitPrice), // Compute total server-side
+      }));
 
-      const validatedItems = z.array(insertInvoiceItemSchema).parse(items);
+      // Validate items against schema
+      z.array(insertInvoiceItemSchema.omit({ invoiceId: true })).parse(validatedItems);
+      
+      // Calculate invoice totals
+      const subtotal = validatedItems.reduce((sum, item) => sum + item.total, 0);
+      const tax = subtotal * 0.08; // 8% tax rate
+      const total = subtotal + tax;
+      
+      // Prepare invoice data with computed fields
+      const invoicePayload = {
+        companyId: req.user.companyId,
+        customerId: invoiceData.customerId,
+        invoiceNumber: invoiceData.invoiceNumber,
+        date: invoiceData.date,
+        dueDate: invoiceData.dueDate,
+        subtotal,
+        tax,
+        total,
+        status: 'pending' as const, // Set default status
+        notes: invoiceData.notes || '',
+      };
+
+      // Validate complete invoice data
+      const validatedInvoice = insertInvoiceSchema.parse(invoicePayload);
 
       const invoice = await storage.createInvoice(validatedInvoice, validatedItems);
       res.status(201).json(invoice);
     } catch (error) {
-      res.status(400).json({ message: "Invalid invoice data" });
+      console.error('Invoice creation error:', error);
+      res.status(400).json({ 
+        message: "Invalid invoice data",
+        details: error instanceof z.ZodError ? error.errors : undefined
+      });
     }
   });
 

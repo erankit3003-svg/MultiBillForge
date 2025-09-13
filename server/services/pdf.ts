@@ -1,6 +1,16 @@
 import { jsPDF } from 'jspdf';
 import { type InvoiceWithDetails } from '@shared/schema';
 
+// Helper function for professional currency formatting
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount);
+}
+
 export class PDFService {
   static generateInvoicePDF(invoice: InvoiceWithDetails): Buffer {
     const doc = new jsPDF();
@@ -25,6 +35,23 @@ export class PDFService {
     doc.setTextColor(30, 58, 138);
     doc.setFont('helvetica', 'bold');
     doc.text('INVOICE', pageWidth - 70, 18);
+    
+    // Status badge based on invoice status
+    const statusColors = {
+      paid: { bg: [22, 163, 74], text: [255, 255, 255] },      // Green
+      pending: { bg: [251, 146, 60], text: [255, 255, 255] },   // Orange  
+      overdue: { bg: [239, 68, 68], text: [255, 255, 255] },    // Red
+      cancelled: { bg: [107, 114, 128], text: [255, 255, 255] } // Gray
+    };
+    
+    const statusColor = statusColors[invoice.status as keyof typeof statusColors] || statusColors.pending;
+    doc.setFillColor(statusColor.bg[0], statusColor.bg[1], statusColor.bg[2]);
+    doc.roundedRect(pageWidth - 65, 20, 40, 8, 2, 2, 'F');
+    
+    doc.setFontSize(9);
+    doc.setTextColor(statusColor.text[0], statusColor.text[1], statusColor.text[2]);
+    doc.setFont('helvetica', 'bold');
+    doc.text(invoice.status.toUpperCase(), pageWidth - 45, 25, { align: 'center' });
     
     // Company details in a styled box
     doc.setFillColor(243, 244, 246);
@@ -144,8 +171,8 @@ export class PDFService {
       
       doc.text(item.description, 25, yPos);
       doc.text(item.quantity.toString(), 125, yPos, { align: 'center' });
-      doc.text(`$${item.unitPrice.toFixed(2)}`, 145, yPos, { align: 'center' });
-      doc.text(`$${item.total.toFixed(2)}`, 175, yPos, { align: 'right' });
+      doc.text(formatCurrency(item.unitPrice), 145, yPos, { align: 'center' });
+      doc.text(formatCurrency(item.total), 175, yPos, { align: 'right' });
       yPos += 12;
     });
 
@@ -163,18 +190,18 @@ export class PDFService {
     doc.setTextColor(75, 85, 99);
     doc.setFont('helvetica', 'normal');
     doc.text('Subtotal:', 125, totalsY + 5);
-    doc.text(`$${invoice.subtotal.toFixed(2)}`, 185, totalsY + 5, { align: 'right' });
+    doc.text(formatCurrency(invoice.subtotal), 185, totalsY + 5, { align: 'right' });
     
     // Tax
-    doc.text('Tax:', 125, totalsY + 15);
-    doc.text(`$${invoice.tax.toFixed(2)}`, 185, totalsY + 15, { align: 'right' });
+    doc.text('Tax (8%):', 125, totalsY + 15);
+    doc.text(formatCurrency(invoice.tax), 185, totalsY + 15, { align: 'right' });
     
     // Total with emphasis
     doc.setFontSize(14);
     doc.setTextColor(30, 58, 138);
     doc.setFont('helvetica', 'bold');
     doc.text('TOTAL:', 125, totalsY + 30);
-    doc.text(`$${invoice.total.toFixed(2)}`, 185, totalsY + 30, { align: 'right' });
+    doc.text(formatCurrency(invoice.total), 185, totalsY + 30, { align: 'right' });
 
     // Notes section if present
     if (invoice.notes) {

@@ -108,22 +108,18 @@ export function CreateInvoiceModal({ open, onOpenChange }: CreateInvoiceModalPro
     mutationFn: async (data: CreateInvoiceFormValues) => {
       const { items, ...invoiceData } = data;
       
-      // Calculate totals
-      const subtotal = items.reduce((sum, item) => sum + item.total, 0);
-      const tax = subtotal * 0.08; // 8% tax rate
-      const total = subtotal + tax;
+      // Prepare items for server (remove computed total)
+      const itemsForServer = items.map(item => ({
+        productId: item.productId,
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+      }));
 
-      const invoicePayload = {
-        ...invoiceData,
-        subtotal,
-        tax,
-        total,
-        status: 'pending' as const,
-      };
-
+      // Send only the required fields to server (server will compute totals and status)
       const res = await apiRequest('POST', '/api/invoices', {
-        ...invoicePayload,
-        items,
+        ...invoiceData,
+        items: itemsForServer,
       });
       return res.json();
     },
